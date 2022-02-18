@@ -27,8 +27,9 @@
 
 </table>
 
-<form action="#">
+<form action="/save">
     <input id="user_name" placeholder="User name">
+    <input id="user_surname" placeholder="User surname">
     <input id="user_login" placeholder="User login">
     <input id="user_email" placeholder="User email">
     <button onclick="createUser()">Create user</button>
@@ -46,12 +47,14 @@
                 var html = '<tr>\n' +
                     '        <th>User id</th>\n' +
                     '        <th>User name</th>\n' +
+                    '        <th>User surname</th>\n' +
                     '        <th>User login</th>\n' +
                     '        <th>User email</th>\n' +
                     '        <th>Delete</th>\n' +
                     '    </tr>';
                 html = html + '<tr><td>' + user.id + '</td>\n' +
                     '        <td>' + user.name + '</td>\n' +
+                    '        <td>' + user.surname + '</td>\n' +
                     '        <td>' + user.login + '</td>\n' +
                     '        <td>' + user.email + '</td>' +
                     '        <td><button onclick="deleteUser(' + user.id + ')">Delete</button></td></tr>';
@@ -63,7 +66,7 @@
     }
 
     function deleteUser(userId) {
-        var xhttp = new XMLHttpRequest();
+        let xhttp = new XMLHttpRequest();
         xhttp.open("DELETE", "http://localhost:8080/users/delete/" + userId, true);
         xhttp.send();
     }
@@ -89,6 +92,7 @@
                 var html = '<tr>\n' +
                     '        <th>User id</th>\n' +
                     '        <th>User name</th>\n' +
+                    '        <th>User surname</th>\n' +
                     '        <th>User login</th>\n' +
                     '        <th>User email</th>\n' +
                     '        <th>Delete</th>\n' +
@@ -98,6 +102,7 @@
                     console.log(user);
                     html = html + '<tr><td>' + user.id + '</td>\n' +
                         '        <td>' + user.name + '</td>\n' +
+                        '        <td>' + user.surname + '</td>\n' +
                         '        <td>' + user.login + '</td>\n' +
                         '        <td>' + user.email + '</td>' +
                         '        <td><button onclick="deleteUser(' + user.id + ')">Delete</button></td></tr>';
