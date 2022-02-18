@@ -1,5 +1,6 @@
 package com.courseshop.Shop.Entity;
 
+import com.courseshop.Shop.DTO.UserDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -26,4 +27,5 @@ public class User {
 
     @Column
     private String email;
+
 }
