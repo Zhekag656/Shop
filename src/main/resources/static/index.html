@@ -21,13 +21,13 @@
 </head>
 <body>
 
-<h2>HTML Table</h2>
+<h2>Users</h2>
 
 <table id="usersList">
 
 </table>
 
-<form action="/save">
+<form th:action="${/save}" th:method="post">
     <input id="user_name" placeholder="User name">
     <input id="user_surname" placeholder="User surname">
     <input id="user_login" placeholder="User login">
@@ -39,8 +39,8 @@
 <button onclick="searchByLogin()">Search by Login</button>
 <script>
     function searchByLogin() {
-        var login = document.getElementById("search_field").value;
-        var xhttp = new XMLHttpRequest();
+        let login = document.getElementById("search_field").value;
+        let xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 var user = JSON.parse(this.responseText);
@@ -61,35 +61,37 @@
                 document.getElementById("usersList").innerHTML = html;
             }
         };
-        xhttp.open("GET", "http://localhost:8080/users/findByLogin?login=" + login, true);
+        xhttp.open("GET", "http://localhost:8080/user/findByLogin?login=" + login, true);
         xhttp.send();
     }
 
     function deleteUser(userId) {
         let xhttp = new XMLHttpRequest();
-        xhttp.open("DELETE", "http://localhost:8080/users/delete/" + userId, true);
+        xhttp.open("DELETE", "http://localhost:8080/user/delete/" + userId, true);
         xhttp.send();
     }
 
     function createUser() {
-        var userName = document.getElementById("user_name").value;
-        var userLogin = document.getElementById("user_login").value;
-        var userEmail = document.getElementById("user_email").value;
+        let userName = document.getElementById("user_name").value;
+        let userLogin = document.getElementById("user_login").value;
+        let userEmail = document.getElementById("user_email").value;
+        let userSurname = document.getElementById("user_surname").value;
 
-        var xmlhttp = new XMLHttpRequest();   // new HttpRequest instance
-        xmlhttp.open("POST", "http://localhost:8080/users/save");
+        let xmlhttp = new XMLHttpRequest();
+
+        xmlhttp.open("POST", "http://localhost:8080/user/save", true);
         xmlhttp.setRequestHeader("Content-Type", "application/json");
-        xmlhttp.send(JSON.stringify({name: userName, login: userLogin, email: userEmail}));
+        xmlhttp.send(JSON.stringify({name: userName, login: userLogin, email: userEmail, surname: userSurname}));
 
         loadUsers();
     }
 
     function loadUsers() {
-        var xhttp = new XMLHttpRequest();
+        let xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-                var users = JSON.parse(this.responseText);
-                var html = '<tr>\n' +
+                let users = JSON.parse(this.responseText);
+                let html = '<tr>\n' +
                     '        <th>User id</th>\n' +
                     '        <th>User name</th>\n' +
                     '        <th>User surname</th>\n' +
@@ -97,8 +99,8 @@
                     '        <th>User email</th>\n' +
                     '        <th>Delete</th>\n' +
                     '    </tr>';
-                for (var i = 0; i < users.length; i++) {
-                    var user = users[i];
+                for (let i = 0; i < users.length; i++) {
+                    let user = users[i];
                     console.log(user);
                     html = html + '<tr><td>' + user.id + '</td>\n' +
                         '        <td>' + user.name + '</td>\n' +
@@ -111,7 +113,7 @@
                 document.getElementById("usersList").innerHTML = html;
             }
         };
-        xhttp.open("GET", "http://localhost:8080/users/findAll", true);
+        xhttp.open("GET", "http://localhost:8080/user/findAll", true);
         xhttp.send();
     }
 
