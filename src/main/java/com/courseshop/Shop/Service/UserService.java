@@ -1,12 +1,16 @@
 package com.courseshop.Shop.Service;
 
+import com.courseshop.Shop.DTO.UserDTO;
 import com.courseshop.Shop.Repository.UserRepo;
 
 import java.util.List;
 
 public interface UserService {
-    UserRepo saveUser(UserRepo userRepo);
+    UserDTO saveUser(UserDTO userDTO);
+
     void deleteUser(Integer userId);
-    UserRepo findByLogin(String login);
-    List<UserRepo> findAll();
+
+    UserDTO findByLogin(String login);
+
+    List<UserDTO> findAll();
 }
