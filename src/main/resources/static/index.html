@@ -1,123 +1,62 @@
 <!DOCTYPE html>
-<html>
+<html xml:lang="uk" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <style>
-        table {
-            font-family: arial, sans-serif;
-            border-collapse: collapse;
-            width: 100%;
-        }
-
-        td, th {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
-        }
-
-        tr:nth-child(even) {
-            background-color: #dddddd;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <title>Welcome</title>
+    <link rel="stylesheet" href="./regform.css" type="text/css">
 </head>
 <body>
+<div class="container">
+    <div class="blueBg">
+        <div class="box signin">
+            <h2>Вже маєте аккаунт?</h2>
+            <button class="signinBtn">Увійти</button>
+        </div>
+        <div class="box signup">
+            <h2>Ще не зареєстровані?</h2>
+            <button class="signupBtn">Зареєструватись</button>
+        </div>
+    </div>
+    <div class="formBx">
+        <div class="form signinForm">
+            <form>
+                <h3>Вхід</h3>
+                <input type="text" placeholder="Логін">
+                <input type="password" placeholder="Пароль">
+                <input type="submit" value="Увійти">
+                <a href="#" class="forgot">Забули пароль?</a>
+            </form>
+        </div>
 
-<h2>Users</h2>
-
-<table id="usersList">
-
-</table>
-
-<form th:action="${/save}" th:method="post">
-    <input id="user_name" placeholder="User name">
-    <input id="user_surname" placeholder="User surname">
-    <input id="user_login" placeholder="User login">
-    <input id="user_email" placeholder="User email">
-    <button onclick="createUser()">Create user</button>
-</form>
-
-<input id="search_field">
-<button onclick="searchByLogin()">Search by Login</button>
+        <div class="form signupForm">
+            <form>
+                <h3>Реєстрація</h3>
+                <input type="text" placeholder="Логін">
+                <input type="text" placeholder="Ім'я">
+                <input type="text" placeholder="Прізвище">
+                <input type="email" placeholder="Електронна адреса">
+                <input type="password" placeholder="Пароль">
+                <input type="submit" value="Зареєструватись">
+            </form>
+        </div>
+    </div>
+</div>
 <script>
-    function searchByLogin() {
-        let login = document.getElementById("search_field").value;
-        let xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                var user = JSON.parse(this.responseText);
-                var html = '<tr>\n' +
-                    '        <th>User id</th>\n' +
-                    '        <th>User name</th>\n' +
-                    '        <th>User surname</th>\n' +
-                    '        <th>User login</th>\n' +
-                    '        <th>User email</th>\n' +
-                    '        <th>Delete</th>\n' +
-                    '    </tr>';
-                html = html + '<tr><td>' + user.id + '</td>\n' +
-                    '        <td>' + user.name + '</td>\n' +
-                    '        <td>' + user.surname + '</td>\n' +
-                    '        <td>' + user.login + '</td>\n' +
-                    '        <td>' + user.email + '</td>' +
-                    '        <td><button onclick="deleteUser(' + user.id + ')">Delete</button></td></tr>';
-                document.getElementById("usersList").innerHTML = html;
-            }
-        };
-        xhttp.open("GET", "http://localhost:8080/user/findByLogin?login=" + login, true);
-        xhttp.send();
+    const signinBtn = document.querySelector('.signinBtn');
+    const signupBtn = document.querySelector('.signupBtn');
+    const formBx = document.querySelector('.formBx');
+    const body = document.querySelector('body')
+
+    signupBtn.onclick = function(){
+        formBx.classList.add('active')
+        body.classList.add('active')
     }
 
-    function deleteUser(userId) {
-        let xhttp = new XMLHttpRequest();
-        xhttp.open("DELETE", "http://localhost:8080/user/delete/" + userId, true);
-        xhttp.send();
+    signinBtn.onclick = function(){
+        formBx.classList.remove('active')
+        body.classList.remove('active')
     }
-
-    function createUser() {
-        let userName = document.getElementById("user_name").value;
-        let userLogin = document.getElementById("user_login").value;
-        let userEmail = document.getElementById("user_email").value;
-        let userSurname = document.getElementById("user_surname").value;
-
-        let xmlhttp = new XMLHttpRequest();
-
-        xmlhttp.open("POST", "http://localhost:8080/user/save", true);
-        xmlhttp.setRequestHeader("Content-Type", "application/json");
-        xmlhttp.send(JSON.stringify({name: userName, login: userLogin, email: userEmail, surname: userSurname}));
-
-        loadUsers();
-    }
-
-    function loadUsers() {
-        let xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function () {
-            if (this.readyState == 4 && this.status == 200) {
-                let users = JSON.parse(this.responseText);
-                let html = '<tr>\n' +
-                    '        <th>User id</th>\n' +
-                    '        <th>User name</th>\n' +
-                    '        <th>User surname</th>\n' +
-                    '        <th>User login</th>\n' +
-                    '        <th>User email</th>\n' +
-                    '        <th>Delete</th>\n' +
-                    '    </tr>';
-                for (let i = 0; i < users.length; i++) {
-                    let user = users[i];
-                    console.log(user);
-                    html = html + '<tr><td>' + user.id + '</td>\n' +
-                        '        <td>' + user.name + '</td>\n' +
-                        '        <td>' + user.surname + '</td>\n' +
-                        '        <td>' + user.login + '</td>\n' +
-                        '        <td>' + user.email + '</td>' +
-                        '        <td><button onclick="deleteUser(' + user.id + ')">Delete</button></td></tr>';
-
-                }
-                document.getElementById("usersList").innerHTML = html;
-            }
-        };
-        xhttp.open("GET", "http://localhost:8080/user/findAll", true);
-        xhttp.send();
-    }
-
-    loadUsers();
 </script>
 </body>
 </html>
