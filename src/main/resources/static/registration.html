@@ -20,8 +20,9 @@
     </div>
     <div class="formBx">
         <div class="form signinForm">
-            <form>
+            <form th:action="@{/login}" method="post">
                 <h3>Вхід</h3>
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                 <input type="text" placeholder="Логін">
                 <input type="password" placeholder="Пароль">
                 <input type="submit" value="Увійти">
@@ -30,7 +31,7 @@
         </div>
 
         <div class="form signupForm">
-            <form>
+            <form th:action="@{/registration}" method="post">
                 <h3>Реєстрація</h3>
                 <input type="text" placeholder="Логін">
                 <input type="text" placeholder="Ім'я">
