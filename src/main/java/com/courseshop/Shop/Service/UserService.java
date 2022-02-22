@@ -19,12 +19,16 @@ import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
+
     @PersistenceContext
     private EntityManager em;
+
     @Autowired
     UserRepo userRepo;
+
     @Autowired
     RoleRepo roleRepo;
+
     @Autowired
     BCryptPasswordEncoder bCryptPasswordEncoder;
 
