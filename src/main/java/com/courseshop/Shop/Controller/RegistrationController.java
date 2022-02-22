@@ -1,36 +1,38 @@
 package com.courseshop.Shop.Controller;
 
-import com.courseshop.Shop.Entity.Role;
 import com.courseshop.Shop.Entity.User;
-import com.courseshop.Shop.Repository.UserRepo;
+import com.courseshop.Shop.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.Collections;
+import javax.validation.Valid;
 
 @Controller
 public class RegistrationController {
+
     @Autowired
-    private UserRepo userRepo;
+    private UserService userService;
 
-    @GetMapping("/registration")
-    public String registration() {
-        return "registration";
+    @GetMapping("/login")
+    public String registration(Model model){
+        model.addAttribute("userForm", new User());
+        return "login";
     }
-    @PostMapping("/registration")
-    public String addUser(User user, Model model){
-        User userFromDb = userRepo.findByUsername(user.getUsername());
-
-        if(userFromDb != null){
-            model.addAttribute("message", "Користувач існує");
-            return "registration";
+    @PostMapping("/login")
+    public String addUser(@ModelAttribute("userForm") @Valid User userForm, BindingResult bindingResult, Model model){
+        if (bindingResult.hasErrors()){
+            return "login";
         }
-
-        user.setActive(true);
-        user.setRoles(Collections.singleton(Role.USER));
+        if (!userService.saveUser(userForm)){
+            model.addAttribute("usernameError", "Користувач з таким ім'ям вже існує");
+            return "login";
+        }
         return "redirect:/login";
     }
+
 }
